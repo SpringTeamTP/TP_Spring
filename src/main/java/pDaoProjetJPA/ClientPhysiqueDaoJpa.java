@@ -4,51 +4,154 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import JPAClass.ClientMoral;
 import JPAClass.ClientPhysique;
 import pDao.Application;
 
 
-@Repository
-@Transactional
 public class ClientPhysiqueDaoJpa implements ClientPhysiqueDao {
 
-	@PersistenceContext
-	private EntityManager em;
-	
 	@Override
 	public List<ClientPhysique> findAll() {
-		Query query = em.createQuery("from ClientPhysique");
-		return query.getResultList();
+		List<ClientPhysique> list = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			Query query = em.createQuery("from ClienPhysique");
+			list = query.getResultList();
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public ClientPhysique find(Long id) {
-		return em.find(ClientPhysique.class, id);
+		ClientPhysique clienPhysique = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			clienPhysique = em.find(ClientPhysique.class, id);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		return clienPhysique;
 	}
 
 	@Override
 	public void create(ClientPhysique obj) {
-		em.persist(obj);
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			em.persist(obj);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
 		
 	}
 
 	@Override
 	public ClientPhysique update(ClientPhysique obj) {
-		return em.merge(obj);
+		ClientPhysique clienPhysique = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			clienPhysique = em.merge(obj);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		
+		return clienPhysique;
 	}
 
 	@Override
 	public void delete(ClientPhysique obj) {
-		em.remove(em.merge(obj));
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			em.remove(obj);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		
 	}
 
+
+
+
+
+	
 }
 
 

@@ -4,52 +4,152 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import JPAClass.Client;
-import JPAClass.Passager;
-import JPAClass.Reservation;
 import pDao.Application;
 
-@Repository
-@Transactional
-public  class ClientDaoJpa implements ClientDao {
 
-	@PersistenceContext
-	private EntityManager em;
-	
+public class ClientDaoJpa implements ClientDao {
+
 	@Override
 	public List<Client> findAll() {
-		Query query = em.createQuery("from Client");
-		return query.getResultList();
+		List<Client> list = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			Query query = em.createQuery("from Client");
+			list = query.getResultList();
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public Client find(Long id) {
-		return em.find(Client.class, id);
-	
+		Client client = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			client = em.find(Client.class, id);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		return client;
 	}
 
 	@Override
 	public void create(Client obj) {
-		em.persist(obj);
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			em.persist(obj);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
 		
 	}
 
 	@Override
 	public Client update(Client obj) {
-		return em.merge(obj);
+		Client client = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			client = em.merge(obj);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		
+		return client;
 	}
 
 	@Override
 	public void delete(Client obj) {
-		em.remove(em.merge(obj));
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			em.remove(obj);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
 		
 	}
+
+
+
+
 
 	
 }

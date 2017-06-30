@@ -32,14 +32,18 @@ public class Aeroport {
 	public Aeroport() {
 		super();
 	}
-	public Aeroport(Long id_Aeroport, String nom_Aeroport) {
+	public Aeroport(List<Ville> villes, long id_Aeroport, String nom_Aeroport) {
 		super();
 		
 		this.id_Aeroport = id_Aeroport;
 		this.nom_Aeroport = nom_Aeroport;
 	}
-
-	
+	public long getId_Aeroport() {
+		return id_Aeroport;
+	}
+	public void setId_Aeroport(long id_Aeroport) {
+		this.id_Aeroport = id_Aeroport;
+	}
 	public String getNom_Aeroport() {
 		return nom_Aeroport;
 	}
@@ -59,20 +63,9 @@ public class Aeroport {
 	public void setVersion(int version) {
 		this.version = version;
 	}
-	public Long getId_Aeroport() {
-		return id_Aeroport;
-	}
 	public void setId_Aeroport(Long id_Aeroport) {
 		this.id_Aeroport = id_Aeroport;
 	}
-	public List<AeroportVille> getAeroportVille() {
-		return aeroportVille;
-	}
-	public void setAeroportVille(List<AeroportVille> aeroportVille) {
-		this.aeroportVille = aeroportVille;
-	}
-
-	
 
 	
 }

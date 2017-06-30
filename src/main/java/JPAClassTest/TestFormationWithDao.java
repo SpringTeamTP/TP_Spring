@@ -33,6 +33,13 @@ import pDaoProjetJPA.VolDao;
 public class TestFormationWithDao {
 
 	public static void main(String[] args) {
+	
+		
+		
+	
+		
+	
+		
 		
 		LoginDao lgDao  = Application.getInstance().getLoginDao();
 		 Login login = new Login();

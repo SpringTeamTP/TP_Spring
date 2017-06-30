@@ -4,63 +4,153 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import JPAClass.Aeroport;
 import pDao.Application;
 
-@Repository
-@Transactional
+
 public class AeroportDaoJpa implements AeroportDao {
 
-	@PersistenceContext
-	// Recherche un bean spring de type EntityManagerFactory et appelle la
-	// méthode .createEntityManager()
-	private EntityManager em;
-		
-	
 	@Override
 	public List<Aeroport> findAll() {
+		List<Aeroport> list = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
 
-		Query query = em.createQuery("from Aeroport");
-	
-		return query.getResultList();
+			Query query = em.createQuery("from Aeroport");
+			list = query.getResultList();
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		return list;
 	}
-	
-	
-	
+
 	@Override
 	public Aeroport find(Long id) {
-	
+		Aeroport aeroport = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
 
-	
-		return em.find(Aeroport.class, id);
+			aeroport = em.find(Aeroport.class, id);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		return aeroport;
 	}
 
 	@Override
 	public void create(Aeroport obj) {
+		EntityManager em = null;
+		EntityTransaction tx = null;
 		
-		em.persist(obj);
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			em.persist(obj);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		
 	}
 
 	@Override
 	public Aeroport update(Aeroport obj) {
+		Aeroport aeroport = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
 		
-		return  em.merge(obj);
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			aeroport = em.merge(obj);
+			
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		
+		return aeroport;
 	}
 
 	@Override
 	public void delete(Aeroport obj) {
-	
-			Aeroport aeroport = em.merge(obj);
-			em.remove(aeroport);
+		EntityManager em = null;
+		EntityTransaction tx = null;
+		
+		try {
+			em = Application.getInstance().getEmf().createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+
+			em.remove(obj);
 			
-	
+			tx.commit(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+		
 	}
+
+
+
+
+
 	
 }
 
